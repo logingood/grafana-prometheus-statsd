@@ -1,0 +1,39 @@
+prometheus:
+    image: murat1985/prometheus_arm32v7
+    ports: 
+        - 9090:9090
+    links:         
+        - statsd_exporter:statsd_exporter
+        - claymore_exporter:claymore_exporter
+    volumes:
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+statsd_exporter:
+    ports:
+      - 9102:9102
+      - 8125:9125/udp
+    image: statsd_exporter:local
+    volumes:
+        - ./statsd.conf:/statsd.conf
+    restart: always
+claymore_exporter:
+    environment:
+        CLAYMORE_DIAL_ADDR: 192.168.31.137;192.168.31.249
+    ports:
+      - 10333:10333
+    image: murat1985/claymore_exporter_arm32v7:latest
+    restart: always
+grafana:
+    image: grafana-armhf:local
+    ports:
+        - 3000:3000
+    volumes:
+        - ./grafana.ini:/etc/grafana/grafana.ini
+        - ./rafana-opt:/opt/grafana
+        - /var/lib/grafana:/var/lib/grafana
+    links:
+        - prometheus:prometheus
+    environment:
+        GF_DASHBOARDS_JSON_ENABLED: "true"
+        GF_DASHBOARDS_JSON_PATH: /opt/grafana
+    restart: always
