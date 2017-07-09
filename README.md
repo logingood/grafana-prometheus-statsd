@@ -8,6 +8,8 @@ Along with:
 * [stastd_exporter](https://github.com/prometheus/statsd_exporter)
 * Unofficial grafana 4.2 image [grafana-armv7h](https://github.com/fg2it/grafana-on-raspberr)
 
+Grafana container is equipped with postfix local mail server to send notifications.
+
 Use [docker-compose](https://docs.docker.com/compose/) tool to bring everything up.
 
 Dockerfiles are in the according directories.
